@@ -36,7 +36,8 @@ migrate.down:
 migrate.force:
 	migrate -path $(MIGRATIONS_FOLDER) -database "$(DATABASE_URL)" force $(version)
 
-docker.run: docker.network docker.postgres swag docker.fiber docker.redis migrate.up
+docker.run: docker.network docker.postgres swag docker.fiber docker.redis
+# docker.run: docker.network docker.postgres swag docker.fiber docker.redis migrate.up
 
 docker.network:
 	docker network inspect dev-network >/dev/null 2>&1 || \
@@ -49,9 +50,10 @@ docker.fiber: docker.fiber.build
 	docker run --rm -d \
 		--name cgapp-fiber \
 		--network dev-network \
-		-p 5000:5000 \
+		-p 5001:5001 \
 		fiber
 
+# Macs: 5001 Linux: 5000
 docker.postgres:
 	docker run --rm -d \
 		--name cgapp-postgres \
